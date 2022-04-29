@@ -1,9 +1,13 @@
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "transazione.h"
 
+/* ----- DEFINE MACROS ----- */
+
 #define SO_REWARD 10
+
+/* ----- STRUCTS DECLARATION ----- */
 
 struct _Transaction
 {
@@ -12,6 +16,8 @@ struct _Transaction
     int quantity;
     int reward;
 };
+
+/* ----- TRANSACTION LIBRARY ----- */
 
 Transaction *inittransaction(char *sender, char *receiver, int quantity, int reward)
 {
@@ -34,6 +40,17 @@ Transaction *inittransaction(char *sender, char *receiver, int quantity, int rew
     transaction->reward = reward;
 
     return transaction;
+}
+
+void freetransaction(Transaction *transaction)
+{
+    if (transaction == NULL)
+    {
+        fprintf(stderr, "Method: freetransaction.\nError: transaction parameter can not be NULL");
+        exit(EXIT_FAILURE);
+    }
+
+    free(transaction);
 }
 
 void timestamp(Transaction *transaction)

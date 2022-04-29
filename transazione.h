@@ -3,14 +3,22 @@
 // It is the struct which keep the infos about a transaction
 typedef struct _Transaction Transaction;
 
-Transaction *inittransaction(char*, char*, int, int);
+// It creates and initializes a new transaction
+Transaction *inittransaction(char *, char *, int, int);
 
-void timestamp(Transaction*);
+// It frees the memory allocated by the transaction
+void freetransaction(Transaction *);
 
-char *getSender(Transaction*);
+void timestamp(Transaction *);
 
-char *getReceiver(Transaction*);
+// It returns the sender of the transaction
+char *getSender(Transaction *);
 
-int getQuantity(Transaction*);
+// It returns the receiver of the transaction
+char *getReceiver(Transaction *);
 
-int getReward(Transaction*);
+// It returns the quantity of the transaction
+int getQuantity(Transaction *);
+
+// It returns the amount of reward assigned to the transaction
+int getReward(Transaction *);
