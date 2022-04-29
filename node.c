@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "node.h"
-#include "transazione.h"
 
 /* ----- DEFINE MACROS ----- */
 
@@ -13,7 +12,7 @@
 struct _TransactionPool
 {
     struct _Transaction **transactions;
-    int num_element;
+    int length; // It represents the number of elements actually stored into the pool.
 };
 
 TransactionPool *init_transaction_pool()
@@ -25,46 +24,51 @@ TransactionPool *init_transaction_pool()
         exit(EXIT_FAILURE);
     }
 
-    transaction_pool->transactions = (struct _Transaction **)malloc(SO_TP_SIZE * sizeof(struct _Transaction *));
+    transaction_pool->transactions = (Transaction **)malloc(SO_TP_SIZE * sizeof(Transaction *));
     if (transaction_pool->transactions == NULL)
     {
         fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the TransactionPool struct");
         exit(EXIT_FAILURE);
     }
 
-    transaction_pool->num_element = 0;
+    transaction_pool->length = 0;
 
     return (transaction_pool);
 }
 
-int addTransaction(Transaction *tran)
+int addTransaction(TransactionPool *transaction_pool, Transaction *transaction)
 {
-    if (TransactionPool->num_element == SO_TP_SIZE)
+    if (transaction_pool->length == SO_TP_SIZE)
     {
         return 0;
     }
 
-    TransactionPool->next = tran;
-    TransactionPool->num_element++;
+    transaction_pool->transactions[transaction_pool->length] = transaction;
+    TransactionPool->length++;
     return 1;
+}
+
+Transaction *getTransaction(TransactionPool *transaction_pool, int index)
+{
+    if (transaction_pool == NULL || index == NULL)
+    {
+        fprintf(stderr, "Method: getTransaction.\nError: treansaction_pool parameter can not be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (index < 0 || index > transaction_pool->length)
+    {
+        fprintf(stderr, "Method: getTransaction.\nError: index parameter out of range");
+        exit(EXIT_FAILURE);
+    }
+
+    return transaction_pool->transactions[index];
 }
 
 void processTransaction()
 {
-
     for (int index = 0; index < SO_BLOCK_SIZE - 1; index++)
     {
         /* code */
-    }
-}
-
-TransactionPool *init_transaction_pool(int *SO_TP_SIZE)
-{
-    TransactionPool *transaction_pool = (TransactionPool *)malloc(SO_TP_SIZE * sizeof(TransactionPool));
-    if (transaction_pool == NULL)
-    {
-        fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the transaction_pool struct");
-        exit(EXIT_FAILURE);
     }
 }
 
@@ -76,6 +80,10 @@ void free_transaction_pool(TransactionPool *transaction_pool)
         exit(EXIT_FAILURE);
     }
 
-    free(transaction_pool->head);
+    for (int index = 0; index < transaction_pool->length; index++)
+    {
+        free(transaction_pool->transactions[index]);
+    }
+    free(transaction_pool->transactions);
     free(transaction_pool);
 }
