@@ -10,14 +10,34 @@
 
 /* ----- STRUCTS DECLARATION ----- */
 
-struct _Transaction
+struct _TransactionPool
 {
-    transaction_pool *head;
-    transaction_pool *next;
+    struct _Transaction **transactions;
     int num_element;
 };
 
-int addTransaction(TransactionPool *tran)
+TransactionPool *init_transaction_pool()
+{
+    TransactionPool *transaction_pool = (TransactionPool *)malloc(sizeof(TransactionPool));
+    if (transaction_pool == NULL)
+    {
+        fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the TransactionPool struct");
+        exit(EXIT_FAILURE);
+    }
+
+    transaction_pool->transactions = (struct _Transaction **)malloc(SO_TP_SIZE * sizeof(struct _Transaction *));
+    if (transaction_pool->transactions == NULL)
+    {
+        fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the TransactionPool struct");
+        exit(EXIT_FAILURE);
+    }
+
+    transaction_pool->num_element = 0;
+
+    return (transaction_pool);
+}
+
+int addTransaction(Transaction *tran)
 {
     if (TransactionPool->num_element == SO_TP_SIZE)
     {
@@ -46,7 +66,6 @@ TransactionPool *init_transaction_pool(int *SO_TP_SIZE)
         fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the transaction_pool struct");
         exit(EXIT_FAILURE);
     }
-    
 }
 
 void free_transaction_pool(TransactionPool *transaction_pool)
