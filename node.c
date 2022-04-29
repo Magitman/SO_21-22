@@ -1,8 +1,14 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "node.h"
 #include "transazione.h"
 
-#define SO_BLOCK_SIZE 2
+/* ----- DEFINE MACROS ----- */
+
+#define SO_BLOCK_SIZE 3
 #define SO_TP_SIZE 8
+
+/* ----- STRUCTS DECLARATION ----- */
 
 struct _Transaction
 {
@@ -11,31 +17,46 @@ struct _Transaction
     int num_element;
 };
 
-int addTransaction(transaction_pool *tran)
+int addTransaction(TransactionPool *tran)
 {
-    if (transaction_pool->num_element == SO_TP_SIZE)
+    if (TransactionPool->num_element == SO_TP_SIZE)
     {
         return 0;
     }
 
-    transaction_pool->next = tran;
-    transaction_pool->num_element++;
+    TransactionPool->next = tran;
+    TransactionPool->num_element++;
     return 1;
 }
 
 void processTransaction()
 {
-    transaction_pool *t1 = transaction_pool->head;
-    transaction_pool *t2 = transaction_pool->next;
-    
-    transaction_pool->head = transaction_pool->next->next;
-    transaction_pool->num_element -= 2;
 
-    // Ardilla :
-    // SCOIATTOLO
-    // ZANZARA
-    // MOSCA
-    /*
-    bar
-    */
+    for (int index = 0; index < SO_BLOCK_SIZE - 1; index++)
+    {
+        /* code */
+    }
+}
+
+TransactionPool *init_transaction_pool(int *SO_TP_SIZE)
+{
+    TransactionPool *transaction_pool = (TransactionPool *)malloc(SO_TP_SIZE * sizeof(TransactionPool));
+    if (transaction_pool == NULL)
+    {
+        fprintf(stderr, "Method: init_transaction_pool.\nError: unable to allocate memory for the transaction_pool struct");
+        exit(EXIT_FAILURE);
+    }
+    
+}
+
+void free_transaction_pool(TransactionPool *transaction_pool)
+{
+    if (transaction_pool == NULL)
+    {
+        fprintf(stderr, "Method: free_transaction_pool.\nError: transaction_pool parameter can not be NULL");
+        exit(EXIT_FAILURE);
+    }
+
+    free(transaction_pool->head);
+    free(transaction_pool);
 }

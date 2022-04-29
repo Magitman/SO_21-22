@@ -1,43 +1,61 @@
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "transazione.h"
 
 #define SO_REWARD 10
 
-char *sender;
-char *receiver;
-int quantity;
+struct _Transaction
+{
+    char *sender;
+    char *receiver;
+    int quantity;
+    int reward;
+};
 
-void timestamp(int clock_gettime(clockid_t clock_id, struct timespec *tp))
+Transaction *inittransaction(char *sender, char *receiver, int quantity, int reward)
+{
+    if (sender == NULL || receiver == NULL || quantity == NULL || reward == NULL || quantity < 0 || reward < 0)
+    {
+        fprintf(stderr, "Method: inittransaction.\nError: parameters can not be NULL nor smaller than 0");
+        exit(EXIT_FAILURE);
+    }
+
+    Transaction *transaction = (Transaction *)malloc(sizeof(Transaction));
+    if (transaction == NULL)
+    {
+        fprintf(stderr, "Method: inittransaction.\nError: unable to allocate memory for the transaction struct");
+        exit(EXIT_FAILURE);
+    }
+
+    transaction->sender = sender;
+    transaction->receiver = receiver;
+    transaction->quantity = quantity;
+    transaction->reward = reward;
+
+    return transaction;
+}
+
+void timestamp(Transaction *transaction)
 {
 }
 
-//metodo per inizializzare INIT, così da non fare mille passaggi ogni volta
-void setSender(char *newsender)
+char *getSender(Transaction *transaction)
 {
-    sender = newsender;
+    return transaction->sender;
 }
 
-void setReceiver(char *newreceiver)
+char *getReceiver(Transaction *transaction)
 {
-    receiver = newreceiver;
+    return transaction->receiver;
 }
 
-char *getSender() {
-    return sender;
+int getQuantity(Transaction *transaction)
+{
+    return transaction->quantity;
 }
 
-char *getReceiver() {
-    return receiver;
-}
-
-void setQuantity(int q) {
-    quantity = q;
-}
-
-int getQuantity() {
-    return quantity;
-}
-
-int getReward() {
-    return quantity*SO_REWARD/100;
+int getReward(Transaction *transaction)
+{
+    return transaction->quantity * SO_REWARD / 100;
 }

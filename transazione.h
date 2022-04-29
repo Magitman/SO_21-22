@@ -1,17 +1,16 @@
 #pragma once
 
-void timestamp();
+// It is the struct which keep the infos about a transaction
+typedef struct _Transaction Transaction;
 
-void setSender(char *);
+Transaction *inittransaction(char*, char*, int, int);
 
-void setReceiver(char *);
+void timestamp(Transaction*);
 
-char *getSender();
+char *getSender(Transaction*);
 
-char *getReceiver();
+char *getReceiver(Transaction*);
 
-void setQuantity(int);
+int getQuantity(Transaction*);
 
-int getQuantity();
-
-int getReward();
+int getReward(Transaction*);
